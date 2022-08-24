@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'boards/bootstrap.min.css'%}">
+<html lang="en">
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% block title %}
+    Разделы
+    {% endblock %}
+
+  </head>
+ <body>
+    <div class="container">
+      <ol class="breadcrumb my-4">
+        <li class="breadcrumb-item active">Boards</li>
+      </ol>
+
+
+      {% block breadcrumb %}
+<!--        <li class="breadcrumb-item active"><a href="{% url 'boards:index' %}"> Forum </a></li>-->
+        <li class="breadcrumb-item active"> Разделы форума</li>
+        <li class="breadcrumb-item active"><a href="{% url 'boards:question' %}"> Опросы </a></li>
+
+      {% endblock %}
+
+    {% block content %}
+
+
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Разделы</th>
+        <th>Сообщений</th>
+        <th>Тем</th>
+        <th>Последняя публикация</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for board in boards %}
+        <tr>
+          <td>
+            <a href="{% url 'boards:boards_topics' board.pk %}">{{ board.name }}</a>
+            <small class="text-muted d-block">{{ board.description }}</small>
+          </td>
+          <td class="align-middle">
+            {{ board.get_posts_count }}
+          </td>
+          <td class="align-middle">
+            {{ board.topics.count }}
+          </td>
+          <td class="align-middle">
+            {% with post=board.get_last_post %}
+              {% if post %}
+                <small>
+                  <a href="{% url 'boards:topic_posts' board.pk post.topic.pk %}">
+                    By {{ post.created_by.username }} at {{ post.created_at }}
+                  </a>
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em>No posts yet.</em>
+                </small>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+ </body>
+</html>
+

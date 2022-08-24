@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    {% block title %}
+    {{ question.question_text }}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'boards/bootstrap.min.css' %}">
+  </head>
+<body>
+    <div class="container">
+          {% block breadcrumb %}
+            <li class="breadcrumb-item"><a href="{% url 'boards:index' %}">Разделы форума</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'boards:question' %}">Опросы</a> </li>
+            <li class="breadcrumb-item"><a>{{ question.question_text }}</a> </li>
+
+          {% endblock %}
+
+    {% block content %}
+        <form action="{% url 'boards:vote' question.id%}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend> <h1>{{ question.question_text }}</h1></legend>
+                {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
+                {% for choice in question.choice_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter}}" value="{{choice.id}}">
+                    <label for="choice{{ forloop.counter}}">{{choice.choice_text}}</label><br>
+                {% endfor %}
+
+            </fieldset>
+            <input type="submit" value="Vote">
+        </form>
+
+    {% endblock %}
+
+</body>
+</html>

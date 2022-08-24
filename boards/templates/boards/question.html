@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+{% load static %}
+
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% block title %}
+    Questions
+    {% endblock %}
+
+  </head>
+  <body>
+    <div class="container">
+      {% block breadcrumb %}
+
+        <li class="breadcrumb-item"><a href="{% url 'boards:index' %}">Разделы форума</a></li>
+        <li class="breadcrumb-item"><a>Опросы</a> </li>
+
+      {% endblock %}
+    </div>
+      {% block content %}
+       {% if latest_question_list %}
+          <ul>
+          {% for question in latest_question_list %}
+              <li><a href="{% url 'boards:detail' question.id %}">{{ question.question_text }}</a></li>
+          {% endfor %}
+          </ul>
+          {% else %}
+              <p>No polls are available.</p>
+          {% endif %}
+      {% endblock %}
+  </body>
+</html>

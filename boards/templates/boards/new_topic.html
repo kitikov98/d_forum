@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}    Новая тема     {% endblock %}
+</head>
+<body>
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:index' %}">Разделы</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:boards_topics' board.pk %}">{{ board.name }}</a></li>
+  <li class="breadcrumb-item active">Новая тема</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Опубликовать</button>
+    <a href="{% url 'boards:boards_topics' board.pk %}" class="btn btn-outline-secondary" role="button">Отмена</a>
+  </form>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+<html lang="en">
+{% load static %}
+{% block stylesheet %}
+  <link rel="stylesheet" href="{% static 'boards/simplemde.min.css' %}">
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/simplemde.min.js' %}"></script>
+  <script>
+    var simplemde = new SimpleMDE();
+  </script>
+{% endblock %}
+<head>
+{% block title %}Редактирование{% endblock %}
+</head>
+<body>
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards:index' %}">Разделы</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:boards_topics' post.topic.board.pk %}">{{ post.topic.board.name }}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'boards:topic_posts' post.topic.board.pk post.topic.pk %}">{{ post.topic.subject }}</a></li>
+  <li class="breadcrumb-item active">Редактирование</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    <a href="{% url 'boards:topic_posts' post.topic.board.pk post.topic.pk %}" class="btn btn-outline-secondary" role="button">Отмена</a>
+  </form>
+{% endblock %}
+</body>
+</html>

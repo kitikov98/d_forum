@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% extends 'boards/base.html' %}
+{% load humanize %}
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% block title %}
+    {{ board.name }} - {{ block.super }}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'boards/bootstrap.min.css' %}">
+  </head>
+  <body>
+    <div class="container">
+      {% block breadcrumb %}
+        <li class="breadcrumb-item"><a href="{% url 'boards:index' %}">Разделы</a></li>
+        <li class="breadcrumb-item active">{{ board.name }}</li>
+      {% endblock %}
+    </div>
+      {% block content %}
+        <div class="mb-4">
+        <a href="{% url 'boards:new_topic' board.pk %}" class="btn btn-primary">Новая тема</a>
+        </div>
+        <table class="table table-striped mb-4">
+          <thead class="thead-dark">
+            <tr>
+              <th>Тема</th>
+              <th>Автор</th>
+              <th>Комментариев</th>
+              <th>Просмотров</th>
+              <th>Последнее обновление</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for topic in topics %}
+              {% url 'boards:topic_posts' board.pk topic.pk as topic_url %}
+              <tr>
+                <td>
+                  <p class="mb-0">
+                    <a href="{{ topic_url }}">{{ topic.subject }}</a>
+                  </p>
+                  <small class="text-muted">
+                    Pages:
+                    {% for i in topic.get_page_range %}
+                      <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+                    {% endfor %}
+                    {% if topic.has_many_pages %}
+                    <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+                    {% endif %}
+                  </small>
+                </td>
+                <td class="align-middle">{{ topic.starter.username }}</td>
+                <td class="align-middle">{{ topic.replies }}</td>
+                <td class="align-middle">{{ topic.views }}</td>
+                <td class="align-middle">{{ topic.last_updated|naturaltime }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+  {% include 'includes/pagination.html' %}
+      {% endblock %}
+  </body>
+</html>
