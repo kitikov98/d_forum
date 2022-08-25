@@ -11,19 +11,26 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import json
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+try:
+    with open(os.path.join(BASE_DIR, 'secrets.json')) as handle:
+        SECRETS = json.load(handle)
+except IOError:
+    SECRETS = {}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!(h5u0ivmddj3i%s_g4)-zt3981av_hr(3s(9^=c6@(c0!8$b+'
+SECRET_KEY = SECRETS['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = SECRETS['debug']
 
 ALLOWED_HOSTS = []
 
@@ -80,10 +87,10 @@ WSGI_APPLICATION = 'forum.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'forum_base',
-        'USER': 'kitikov98',
-        'PASSWORD': 'Chapaev1!',
-        'HOST': 'localhost',
+        'NAME': SECRETS['db_name'],
+        'USER': SECRETS['db_user'],
+        'PASSWORD': SECRETS['db_password'],
+        'HOST': SECRETS['db_host'],
         'PORT': '',
     }
 }
