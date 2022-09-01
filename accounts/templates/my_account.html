@@ -6,7 +6,7 @@
 </head>
 <body>
 {% block breadcrumb %}
-  <li class="breadcrumb-item active">My account</li>
+  <li class="breadcrumb-item active">Мой профиль</li>
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
       <form method="post" novalidate>
         {% csrf_token %}
         {% include 'includes/form.html' %}
-        <button type="submit" class="btn btn-success">Save changes</button>
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
       </form>
     </div>
   </div>
